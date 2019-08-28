@@ -37,36 +37,38 @@ int main()
     }
 
     // accept
-    int clientfd = accept(listenfd, NULL, NULL);
-    if (clientfd == -1)
-    {
-        perror("accept");
-        return -4;
-    }
-
-    // recv send
     while (true)
     {
-        char buffer[1024];
-        memset(buffer, 0, sizeof(buffer));
-
-        int recvlen = recv(clientfd, buffer, sizeof(buffer), 0);
-        if (recvlen <= 0)
+        int clientfd = accept(listenfd, NULL, NULL);
+        if (clientfd == -1)
         {
-            break;
+            perror("accept");
+            return -4;
         }
-        else
-        {
-            std::string msg = std::string(buffer, 0, recvlen);
-            std::string back_msg = "";
-            if (msg.find("QUOTE") != std::string::npos)
-            {
-                back_msg = quote.GetRandomQuote();
-            }
 
-            send(clientfd, back_msg.c_str(), back_msg.size() + 1, 0);
+        // recv send
+        while (true)
+        {
+            char buffer[1024];
+            memset(buffer, 0, sizeof(buffer));
+
+            int recvlen = recv(clientfd, buffer, sizeof(buffer), 0);
+            if (recvlen <= 0)
+            {
+                break;
+            }
+            else
+            {
+                std::string msg = std::string(buffer, 0, recvlen);
+                std::string back_msg = "";
+                if (msg.find("QUOTE") != std::string::npos)
+                {
+                    back_msg = quote.GetRandomQuote();
+                }
+
+                send(clientfd, back_msg.c_str(), back_msg.size() + 1, 0);
+            }
         }
     }
-
     return 0;
 }
