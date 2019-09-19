@@ -1,13 +1,14 @@
 #include <stdio.h>
 #include <string.h>
 #include <string>
-#include <set>
 
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+
+#include "chatusermanager.h"
 
 #define LISTEN_PORT 6789
 
@@ -43,7 +44,6 @@ int main()
 	FD_SET(listenfd, &master);
 
 	char buffer[4096];
-	std::set<int> clients;
 
 	while (true)
 	{
@@ -67,7 +67,7 @@ int main()
 				if (clientfd != -1)
 				{
 					FD_SET(clientfd, &master);
-					clients.insert(clientfd);
+					CHATUSER_MGR.AddChatUser(clientfd);
 
 					// TODO: broad cast to all client
 				}
@@ -82,18 +82,12 @@ int main()
 				{
 					close(fd);
 					FD_CLR(fd, &master);
-					clients.erase(fd);
+					CHATUSER_MGR.RemoveChatUser(fd);
 				}
 				else
 				{
 					// broadcast the message to all client
-					for (int fdtmp : clients)
-					{
-						if (fdtmp != fd)
-						{
-							send(fdtmp, buffer, recv_len, 0);
-						}
-					}
+					CHATUSER_MGR.Broadcast(buffer, recv_len, {fd});
 				}
 			}
 
