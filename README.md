@@ -26,3 +26,5 @@ $ telnet 127.0.0.1 6789
 
 1. 键入 CTRL + ]
 2. 输入 quit
+
+或者使用 Putty ，connect type 选择 Raw 。这个方法也适用于 windows 平台。
