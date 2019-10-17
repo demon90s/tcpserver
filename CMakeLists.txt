@@ -6,6 +6,8 @@ set(CMAKE_CXX_FLAGS "-g -Wall -std=c++11")
 
 add_executable(tcpserver ${PROJECT_SOURCE_DIR}/src/main.cpp)
 
+add_executable(client ${PROJECT_SOURCE_DIR}/client/client.cpp)
+
 file(GLOB_RECURSE CHATSERVER_FILES
     ${PROJECT_SOURCE_DIR}/chatserver/*.cpp
     ${PROJECT_SOURCE_DIR}/chatserver/*.h)

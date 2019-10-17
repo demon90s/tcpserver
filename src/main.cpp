@@ -57,7 +57,7 @@ int main()
 		int recv_len = recv(clientfd, buffer, sizeof(buffer), 0);
 		if (recv_len < 0)
 		{
-			fprintf(stderr, "recv failed!\n");
+			perror("receive");
 			break;
 		}
 		else if (recv_len == 0)
